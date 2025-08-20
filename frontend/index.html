@@ -1,4 +1,3 @@
-<!-- --- START OF FILE frontend/index.html --- -->
 <!doctype html>
 <html lang="en">
     <head>
@@ -6,86 +5,303 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Madame Satoshi's Bitcoin Oracle</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="icon" href="favicon.ico" type="image/x-icon" />
     </head>
     <body>
         <div class="app-container">
-            <!-- Side Win Displays REMOVED -->
-
             <div class="cabinet-frame">
                 <img
-                    src="automaton/madam-satoshi-web.webp"
-                    alt="Madame Satoshi Automaton Cabinet"
-                    class="cabinet-background-image"
-                />
+                        src="automaton/madam-satoshi-web2.webp" alt="Madame Satoshi Automaton Cabinet"
+                        class="cabinet-background-image"
+                    />
+                <div class="eye-glow eye-glow-left"></div>
+                <div class="eye-glow eye-glow-right"></div>
                 <div id="card-display"></div>
                 <button id="draw-button" class="pay-button" disabled>
                     Initializing...
                 </button>
                 <div id="info-trigger" title="How It Works">ⓘ</div>
-
-                <!-- Modified Output Area -->
                 <div class="output-area">
                     <div id="fortune-display" class="oracle-screen"></div>
-                    <!-- ADDED Key Wins Display -->
                     <div id="key-wins-display" class="key-wins">
                         <span class="jackpot-line"
-                            ><strong>JACKPOT:</strong> Sun + World +
-                            Magician!</span
+                            ><strong>JACKPOT:</strong> Sun (XVIII) + World (XX)
+                            + Magician (I)!</span
                         >
                         <span class="other-wins-line"
                             >(Other Major/Minor Wins Possible - See ⓘ)</span
                         >
                     </div>
-                    <div id="balance-info" class="balance-area">
-                        Withdrawable: 0 sats
+                    <div id="jackpot-info" class="jackpot-area">
+                        Jackpot Pool: ... sats
                     </div>
-                    <div id="jackpot-info" class="jackpot-area"></div>
+                    <div
+                        id="balance-info"
+                        class="balance-area"
+                        title="Sats accumulated from readings that you can withdraw via Lightning."
+                    >
+                        Balance: 0 sats
+                    </div>
                 </div>
-
-                <button id="claim-button" class="withdraw-btn" disabled>
-                    Claim Winnings
-                </button>
-
-                <!-- Concise Instructions Area (Content unchanged, still ul) -->
+                <div class="bottom-buttons-container">
+                    <button id="deposit-button" class="action-btn deposit-btn">
+                        Deposit Sats
+                    </button>
+                    <button
+                        id="withdraw-button"
+                        class="action-btn withdraw-btn"
+                        disabled
+                    >
+                        Withdraw Sats
+                    </button>
+                </div>
                 <div id="instructions-area" class="instructions">
                     <h3>How It Works</h3>
                     <ul>
                         <li>Pay 21 sats via Lightning to play.</li>
-                        <li>~80% (16 sats) funds the Jackpot Pool.</li>
+                        <li>~76.2% (16 sats) funds the Jackpot Pool.</li>
                         <li>3 cards are drawn, revealing your fortune.</li>
-                        <li>Wins add to your 'Withdrawable' balance below.</li>
+                        <li>Wins add to your 'Balance' below.</li>
                         <li>
                             <strong>WIN TIERS</strong> (Pool Permitting):<br />
-                             - <strong>JACKPOT!</strong> (Sun+World+Magician): Wins ENTIRE pool!<br />
-                             - Major Win (See side panel): Wins ~35% pool (min 75 sats).<br />
-                             - Minor Win (Other combos): Wins ~15% pool (min 21 sats).
-                        </li>
-                         <li>
-                            <strong style="color: #ffcc66">WARNING:</strong> Jackpot is LIVE & shared! Amount can change instantly. Payouts capped by available pool.
+                            - <strong>JACKPOT!</strong> (Sun+World+Magician):
+                            Wins ENTIRE pool!<br />
+                            - Major Win (See Details Below): Wins ~35% pool (min
+                            75 sats).<br />
+                            - Minor Win (See Details Below): Wins ~15% pool (min
+                            21 sats).
                         </li>
                         <li>
-                            <strong>CLAIM:</strong> Click 'Claim Winnings' (if balance > 0), then paste an invoice from *your* wallet matching the exact amount.
+                            <strong style="color: #ffcc66">WARNING:</strong>
+                            Jackpot is LIVE & shared! Amount can change
+                            instantly. Payouts capped by available pool. Minimum
+                            pool size considered for wins is 500 sats.
+                        </li>
+                        <li>
+                            <strong>WITHDRAW:</strong> Click 'Withdraw Balance'
+                            (if balance > 0) to get a unique LNURL withdrawal
+                            link/QR code. You can withdraw your full balance or
+                            a partial amount.
+                        </li>
+                        <li class="list-separator">
+                            <strong>Major Wins:</strong> Sun+World+Ace /
+                            Emp+Empress+Str / Star+Sun+Temp
+                        </li>
+                        <li>
+                            <strong>Minor Wins:</strong> Ace+Wheel / Chariot+Str
+                            / Sun+Lovers
+                        </li>
+                        <li
+                            class="disclaimer-note"
+                            style="font-size: 0.8em; color: #a09070"
+                        >
+                            <i
+                                ><strong>Disclaimer:</strong> Your balance is
+                                tied to this browser session. Clearing browser
+                                data may reset it.</i
+                            >
                         </li>
                     </ul>
                 </div>
-
-                <!-- Payment Modal (Unchanged) -->
-                <div id="payment-modal" class="modal-overlay" style="display: none">
-                    <div class="modal-content"> <button id="modal-close-button" class="modal-close"> × </button> <h2>Pay 21 Sats via Lightning</h2> <p> Scan QR or tap/click <strong style="cursor: help" title="Click QR code image">QR code</strong> / <strong style="cursor: help" title="Click invoice text below cards">invoice text</strong> to copy. </p> <div id="qrcode-container" title="Click QR Code to copy invoice"> <canvas id="qrcode-canvas"></canvas> </div> <p id="payment-status">Waiting for payment...</p> <p><small>(Invoice expires in ~5 minutes)</small></p> </div>
+                <div
+                    id="payment-modal"
+                    class="modal-overlay"
+                    style="display: none"
+                >
+                    <div class="modal-content">
+                        <button id="modal-close-button" class="modal-close">
+                            &times;
+                        </button>
+                        <h2>Pay 21 Sats via Lightning</h2>
+                        <p>
+                            Scan, tap or click
+                            <strong
+                                style="cursor: help"
+                                title="Click QR code image"
+                                >QR code</strong
+                            >
+                            or
+                            <strong
+                                style="cursor: help"
+                                title="Click invoice text below QR code"
+                                >invoice text</strong
+                            >
+                            to copy.
+                        </p>
+                        <div
+                            id="qrcode-container"
+                            title="Click QR Code to copy invoice"
+                        >
+                            <canvas id="qrcode-canvas"></canvas>
+                        </div>
+                        <code
+                            id="invoice-text"
+                            class="invoice-text"
+                            title="Click to copy invoice"
+                        ></code>
+                        <p id="payment-status">Waiting for payment...</p>
+                        <p><small>(Invoice expires in ~5 minutes)</small></p>
+                    </div>
                 </div>
+                <div
+                    id="deposit-modal"
+                    class="modal-overlay"
+                    style="display: none"
+                >
+                    <div class="modal-content">
+                        <button
+                            id="deposit-modal-close-button"
+                            class="modal-close"
+                        >
+                            &times;
+                        </button>
+                        <h2>Deposit Sats</h2>
+                        <p>
+                            Enter the amount you wish to deposit via Lightning.
+                        </p>
 
-                <!-- Claim Payout Modal (Unchanged) -->
-                <div id="claim-modal" class="modal-overlay" style="display: none">
-                    <div class="modal-content"> <button id="claim-modal-close-button" class="modal-close"> × </button> <h2>Claim Your Winnings</h2> <p id="claim-instructions"> You have <strong id="claim-amount">0</strong> sats to claim. <br />Please generate and paste a Lightning invoice for exactly this amount from your wallet below: </p> <textarea id="claim-invoice-input" class="invoice-input" rows="4" placeholder="Paste your Lightning invoice (lnbc...) here"></textarea> <button id="submit-claim-button" class="submit-claim-btn"> Submit Claim </button> <p id="claim-status" class="claim-status-area"></p> <p> <small >Ensure the invoice amount matches exactly.</small> </p> </div>
+                        <div class="amount-input-container">
+                            <label for="deposit-amount-input-field"
+                                >Amount (sats):</label
+                            >
+                            <input
+                                type="number"
+                                id="deposit-amount-input-field"
+                                placeholder="e.g., 1000"
+                                min="1"
+                            />
+                            <button
+                                id="generate-deposit-invoice-button"
+                                class="small-button"
+                            >
+                                Generate Invoice
+                            </button>
+                        </div>
+
+                        <p
+                            id="deposit-status"
+                            style="
+                                min-height: 1.2em;
+                                font-weight: bold;
+                                color: #ffcc66;
+                            "
+                        >
+                            Enter amount and generate invoice.
+                        </p>
+
+                        <div
+                            id="deposit-qrcode-container"
+                            title="Click QR Code to copy invoice"
+                            style="display: none"
+                        >
+                            <canvas id="deposit-qrcode-canvas"></canvas>
+                        </div>
+
+                        <code
+                            id="deposit-invoice-text"
+                            class="invoice-text"
+                            title="Click to copy invoice"
+                            style="display: none"
+                        ></code>
+
+                        <p>
+                            <small
+                                >(Pay the generated invoice using your Lightning
+                                wallet)</small
+                            >
+                        </p>
+                    </div>
                 </div>
+                <div
+                    id="withdraw-modal"
+                    class="modal-overlay"
+                    style="display: none"
+                >
+                    <div class="modal-content">
+                        <button
+                            id="withdraw-modal-close-button"
+                            class="modal-close"
+                        >
+                            &times;
+                        </button>
+                        <h2>Withdraw Balance</h2>
 
-            </div> <!-- End cabinet-frame -->
+                        <p
+                            id="withdraw-amount-display"
+                            style="font-weight: bold; margin-bottom: 15px"
+                        >
+                            Current Balance: 0 sats
+                        </p>
 
-             <!-- Side Win Displays REMOVED -->
+                        <div class="amount-input-container">
+                            <label for="withdraw-amount-input-field"
+                                >Amount (sats):</label
+                            >
+                            <input
+                                type="number"
+                                id="withdraw-amount-input-field"
+                                placeholder="Full balance"
+                                min="1"
+                            />
+                            <button
+                                id="update-withdraw-link-button"
+                                class="small-button"
+                            >
+                                Update LNURL
+                            </button>
+                        </div>
 
-        </div> <!-- End app-container -->
+                        <p style="font-size: 0.9em; margin-top: 15px">
+                            Scan or copy the **one-time use** LNURL below into a
+                            compatible Lightning wallet.
+                            <br />Waiting for claim confirmation...
+                        </p>
+
+                        <p
+                            style="
+                                font-size: 0.85em;
+                                color: #a09070;
+                                margin-top: -5px;
+                                margin-bottom: 15px;
+                            "
+                        >
+                            <small
+                                >(Use wallets like Phoenix, Breez, BlueWallet,
+                                Zeus etc.)</small
+                            >
+                        </p>
+
+                        <div
+                            id="withdraw-qrcode-container"
+                            title="Click QR Code to copy LNURL"
+                        >
+                            <canvas id="withdraw-qrcode-canvas"></canvas>
+                        </div>
+
+                        <p
+                            id="withdraw-status"
+                            style="min-height: 1.2em; font-weight: bold"
+                        >
+                            Generating withdrawal link...
+                        </p>
+
+                        <code
+                            id="withdraw-lnurl-text"
+                            class="lnurl-text"
+                            title="Click to copy LNURL"
+                        ></code>
+
+                        <p>
+                            <small
+                                >You can close this window; checking continues
+                                for ~5 mins.</small
+                            >
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/qrcode@1/build/qrcode.min.js"></script>
         <script src="script.js"></script>
     </body>
 </html>
-<!-- --- END OF FILE frontend/index.html --- -->

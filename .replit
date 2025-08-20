@@ -1,0 +1,8 @@
+language = "nodejs"
+entrypoint = "backend/index.js"
+run = "npm start"
+modules = ["nodejs-20"]
+
+[[ports]]
+localPort = 3001
+externalPort = 80

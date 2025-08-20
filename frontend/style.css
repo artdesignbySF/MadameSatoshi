@@ -1,117 +1,536 @@
 /* --- START OF FILE frontend/style.css --- */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Patua+One&display=swap');
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Courier New', Courier, monospace; background-color: #000000; color: #e0d6b8; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 10px; overflow-x: hidden; }
-.app-container { width: 100%; max-width: 1100px; display: flex; flex-direction: column; align-items: center; position: relative; }
-.cabinet-frame { position: relative; width: 100%; aspect-ratio: 1165 / 1472; margin: 0 auto; max-width: calc(98vh * (1165 / 1472)); max-height: 98vh; overflow: visible; perspective: 1000px; }
-.cabinet-background-image { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; pointer-events: none; }
 
-#card-display { position: absolute; z-index: 5; display: flex; justify-content: center; align-items: center; gap: 3%; bottom: 46%; left: 24%; width: 52%; height: 17%; }
-#draw-button.pay-button { position: absolute; z-index: 10; bottom: 37.5%; left: 31%; width: 38%; height: 4.5%; font-family: Georgia, 'Times New Roman', Times, serif; font-size: clamp(0.7rem, 1.5vw, 1.1rem); line-height: 1; font-weight: bold; color: #402810; background: linear-gradient(145deg, #f8e0a0, #e8c070); border: 2px solid #a07040; border-radius: 8px; box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3); cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease; animation: pulse-button 2.5s infinite ease-in-out; display: flex; justify-content: center; align-items: center; padding: 0 5px; }
-#draw-button.pay-button:hover { background: linear-gradient(145deg, #fce8b0, #f0c880); box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4); animation-play-state: paused; }
-#draw-button.pay-button:active { transform: scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2); }
-#draw-button.pay-button:disabled { background: #888; color: #555; cursor: not-allowed; box-shadow: inset 0 1px 4px rgba(0,0,0,0.4); border-color: #666; transform: none; animation: none; }
-@keyframes pulse-button { 0%, 100% { transform: scale(1); box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 0px rgba(240, 200, 100, 0.3); } 50% { transform: scale(1.03); box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 10px rgba(240, 200, 100, 0.5); } }
+body {
+    font-family: 'Lora', 'Courier New', monospace, serif;
+    background-color: #000000;
+    color: #e0d6b8; /* Default text color */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align cabinet to top */
+    min-height: 100vh;
+    padding: 10px;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
 
-/* Enhanced Info Icon Pulse */
-#info-trigger { position: absolute; z-index: 11; cursor: pointer; bottom: 37.5%; left: 71.5%; width: 4.5%; height: 4.5%; background-color: rgba(160, 112, 64, 0.0); color: #f0e0a0; border: none; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: clamp(1rem, 2vw, 1.5rem); font-weight: bold; line-height: 1; box-shadow: none; transition: background-color 0.2s, transform 0.2s, text-shadow 0.2s; animation: pulse-info 2.5s infinite ease-in-out; animation-delay: 0.8s; }
-#info-trigger:hover { background-color: rgba(180, 130, 80, 0.3); transform: scale(1.1); text-shadow: 0 0 5px #f0e0a0; animation-play-state: paused; }
-@keyframes pulse-info { 0%, 100% { transform: scale(1); text-shadow: 0 0 3px rgba(240, 220, 160, 0.3); } 50% { transform: scale(1.1); text-shadow: 0 0 8px rgba(240, 220, 160, 0.9); } } /* More noticeable glow */
+.app-container {
+    width: 100%;
+    max-width: 1100px; /* Max width of the app */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
 
-.output-area { position: absolute; z-index: 5; bottom: 4%; left: 24%; width: 52%; height: 30%; background-color: rgba(10, 8, 4, 0.85); border: 1px solid rgba(180, 140, 80, 0.6); border-radius: 6px; padding: 1.5% 3% 1% 3%; /* Adjusted top padding slightly */ display: flex; flex-direction: column; align-items: center; justify-content: space-between; overflow: hidden; }
-#instructions-area.instructions { position: absolute; z-index: 15; bottom: calc(37.5% + 4.5% + 0.5%); left: 60%; width: 200px; max-width: 35%; opacity: 0; max-height: 0; overflow: hidden; pointer-events: none; transition: opacity 0.4s ease-out, max-height 0.4s ease-out, transform 0.3s ease-out; transform: translateY(10px) scale(0.95); transform-origin: bottom right; background-color: rgba(30, 20, 10, 0.95); border: 1px solid #b08c50; border-radius: 6px; padding: 15px 20px; color: #d8c8a8; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
-#instructions-area.instructions.is-visible { opacity: 1; max-height: 300px; overflow-y: auto; pointer-events: auto; transform: translateY(0) scale(1); scrollbar-width: thin; scrollbar-color: #a07040 rgba(30, 20, 10, 0.8); }
-#instructions-area h3 { font-family: Georgia, 'Times New Roman', Times, serif; color: #e0b070; text-align: center; margin-bottom: 10px; font-size: 1.1em; }
+/* Main cabinet frame */
+.cabinet-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 677 / 1357; /* NEW ASPECT RATIO of madam-satoshi-web2.webp */
+    margin: 0 auto;
+    /* Adjust max-width to use the new aspect ratio */
+    max-width: calc(98vh * (677 / 1357));
+    max-height: 98vh;
+    overflow: visible; /* Keep as is for now, or change to hidden if you scale the image */
+    perspective: 1000px;
+}
+
+.cabinet-background-image {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will ensure it fills the frame, and since aspect ratios match, no crop */
+    object-position: center center;
+    /* Remove any transform: scale() or translateX() for now */
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Area where Tarot cards are displayed */
+#card-display {
+    position: absolute;
+    z-index: 5; /* Above background, below buttons/output */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3%; /* Space between cards */
+    /* Positioning based on cabinet image proportions */
+    bottom: 46%;
+    left: 24%;
+    width: 52%;
+    height: 17%;
+}
+
+/* Main payment/draw button */
+#draw-button.pay-button {
+    position: absolute;
+    z-index: 10; /* Above cards */
+    bottom: 37.5%;
+    left: 31%;
+    width: 38%;
+    height: 4.5%;
+    font-family: 'Patua One', Georgia, serif; /* Specific font for button */
+    font-size: clamp(0.7rem, 1.5vw, 1.1rem); /* Responsive font size */
+    line-height: 1; /* Prevent extra spacing */
+    font-weight: normal;
+    color: #402810; /* Dark text color */
+    background: linear-gradient(145deg, #f8e0a0, #e8c070); /* Gold gradient */
+    border: 2px solid #a07040; /* Dark gold border */
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3); /* 3D effect */
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+    animation: pulse-button 2.5s infinite ease-in-out; /* Subtle pulse animation */
+    display: flex; /* Center text */
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px; /* Prevent text overflow */
+}
+
+#draw-button.pay-button:hover {
+    background: linear-gradient(145deg, #fce8b0, #f0c880); /* Lighter gold on hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    animation-play-state: paused; /* Pause pulse on hover */
+}
+
+#draw-button.pay-button:active {
+    transform: scale(0.97); /* Press effect */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#draw-button.pay-button:disabled {
+    background: #888; /* Grey out when disabled */
+    color: #555;
+    cursor: not-allowed;
+    box-shadow: inset 0 1px 4px rgba(0,0,0,0.4);
+    border-color: #666;
+    transform: none; /* Disable press effect */
+    animation: none; /* Disable pulse */
+}
+
+/* Button pulse animation keyframes */
+@keyframes pulse-button {
+    0%, 100% { transform: scale(1); box-shadow: 0 3px 6px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 0px rgba(240, 200, 100, 0.3); }
+    50% { transform: scale(1.03); box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 0 10px rgba(240, 200, 100, 0.5); }
+}
+
+/* Information icon (i) button */
+#info-trigger {
+    position: absolute;
+    z-index: 11; /* Above draw button */
+    cursor: pointer;
+    bottom: 37.5%;
+    left: 71.5%;
+    width: 4.5%;
+    height: 4.5%;
+    background-color: rgba(160, 112, 64, 0.0); /* Transparent background */
+    color: #f0e0a0; /* Light gold color */
+    border: none;
+    border-radius: 50%; /* Circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: bold;
+    line-height: 1;
+    box-shadow: none;
+    transition: background-color 0.2s, transform 0.2s, text-shadow 0.2s;
+    animation: pulse-info 2.5s infinite ease-in-out; /* Pulse animation */
+    animation-delay: 0.8s; /* Delay info pulse */
+}
+
+#info-trigger:hover {
+    background-color: rgba(180, 130, 80, 0.3); /* Subtle background on hover */
+    transform: scale(1.1);
+    text-shadow: 0 0 5px #f0e0a0; /* Glow effect */
+    animation-play-state: paused;
+}
+
+/* Info pulse animation keyframes */
+@keyframes pulse-info {
+    0%, 100% { transform: scale(1); text-shadow: 0 0 3px rgba(240, 220, 160, 0.3); }
+    50% { transform: scale(1.1); text-shadow: 0 0 8px rgba(240, 220, 160, 0.9); }
+}
+
+/* Main output area for fortune, balance, jackpot */
+.output-area {
+    position: absolute;
+    z-index: 5; /* Below buttons, above cards */
+    bottom: 4%;
+    left: 24%;
+    width: 52%;
+    height: 30%;
+    background-color: rgba(10, 8, 4, 0.85); /* Dark, semi-transparent */
+    border: 1px solid rgba(180, 140, 80, 0.6); /* Gold border */
+    border-radius: 6px;
+    padding: 1.5% 3% 1% 3%; /* Internal spacing */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; /* Distribute space */
+    overflow: hidden; /* Hide overflow */
+}
+
+/* Instructions panel that pops up */
+#instructions-area.instructions {
+    position: absolute;
+    z-index: 15; /* Above almost everything */
+    bottom: calc(37.5% + 4.5% + 0.5%);
+    left: 60%;
+    width: 200px;
+    max-width: 35%;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out, max-height 0.4s ease-out, transform 0.3s ease-out;
+    transform: translateY(10px) scale(0.95);
+    transform-origin: bottom right;
+    background-color: rgba(30, 20, 10, 0.95);
+    border: 1px solid #b08c50;
+    border-radius: 6px;
+    padding: 15px 20px;
+    color: #d8c8a8;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+
+#instructions-area.instructions.is-visible {
+    opacity: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    scrollbar-width: thin;
+    scrollbar-color: #a07040 rgba(30, 20, 10, 0.8);
+}
+#instructions-area li.list-separator {
+    border-top: 1px solid rgba(180, 140, 80, 0.3);
+    margin-top: 10px;
+    padding-top: 10px;
+}
+#instructions-area h3 {
+    font-family: 'Patua One', Georgia, serif;
+    color: #e0b070;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    font-weight: normal;
+}
 #instructions-area ul { list-style: disc; margin-left: 20px; line-height: 1.5; }
 #instructions-area li { margin-bottom: 8px; font-size: 0.9em; }
-#instructions-area strong { color: #f0c080; } #instructions-area em { font-size: 0.9em; color: #a09070; }
-#instructions-area.instructions::-webkit-scrollbar { width: 8px; } #instructions-area.instructions::-webkit-scrollbar-track { background: rgba(30, 20, 10, 0.8); border-radius: 4px; margin: 2px 0; } #instructions-area.instructions::-webkit-scrollbar-thumb { background-color: #a07040; border-radius: 4px; border: 1px solid rgba(40, 30, 20, 0.9); } #instructions-area.instructions::-webkit-scrollbar-thumb:hover { background-color: #b88a5a; }
+#instructions-area strong { color: #f0c080; font-weight: 600; }
+#instructions-area em { font-size: 0.9em; color: #a09070; font-style: italic; }
+#instructions-area.instructions::-webkit-scrollbar { width: 8px; }
+#instructions-area.instructions::-webkit-scrollbar-track { background: rgba(30, 20, 10, 0.8); border-radius: 4px; margin: 2px 0; }
+#instructions-area.instructions::-webkit-scrollbar-thumb { background-color: #a07040; border-radius: 4px; border: 1px solid rgba(40, 30, 20, 0.9); }
+#instructions-area.instructions::-webkit-scrollbar-thumb:hover { background-color: #b88a5a; }
+#instructions-area li.disclaimer-note { list-style: none; margin-left: -15px; }
 
-/* Card Flip */
-.card { position: relative; flex: 1 1 30%; max-width: 31.5%; aspect-ratio: 180 / 285; border-radius: 4px; overflow: hidden; box-shadow: 2px 2px 5px rgba(0,0,0,0.7); border: 1.5px solid #a89060; background-color: #1a1712; opacity: 0; transform-style: preserve-3d; transform: rotateY(180deg) scale(0.8); transform-origin: center center; transition: opacity 0.6s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-#card-display > .card:nth-child(1) { transition-delay: 0.1s; } #card-display > .card:nth-child(2) { transition-delay: 0.3s; } #card-display > .card:nth-child(3) { transition-delay: 0.5s; }
+/* Individual Tarot card styling */
+.card {
+    position: relative;
+    flex: 1 1 30%;
+    max-width: 31.5%;
+    aspect-ratio: 180 / 285;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+    border: 1.5px solid #a89060;
+    background-color: #1a1712;
+    opacity: 0;
+    transform-style: preserve-3d;
+    transform: rotateY(180deg) scale(0.8);
+    transform-origin: center center;
+    transition: opacity 0.6s ease-out, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#card-display > .card:nth-child(1) { transition-delay: 0.1s; }
+#card-display > .card:nth-child(2) { transition-delay: 0.3s; }
+#card-display > .card:nth-child(3) { transition-delay: 0.5s; }
 .card.is-visible { opacity: 1; transform: rotateY(0deg) scale(1); }
 .card img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 2.5px; backface-visibility: hidden; }
 
-/* Fortune Display */
-#fortune-display.oracle-screen { width: 100%; flex-grow: 1; color: #e8d8b8; font-size: clamp(0.85rem, 1.5vw, 1.1rem); line-height: 1.45; text-shadow: 1px 1px 2px rgba(0,0,0,0.7); font-family: Georgia, serif; padding: 2% 2% 1% 2%; text-align: center; background: none; border: none; overflow-y: auto; margin-bottom: 1%; /* Reduced margin */ min-height: 3em; opacity: 0; transition: opacity 0.5s ease-out, color 0.3s ease, background-color 0.2s ease, transform 0.3s ease; cursor: default; }
+/* Fortune display area */
+#fortune-display.oracle-screen {
+    width: 100%;
+    flex-grow: 1;
+    color: #e8d8b8;
+    font-size: clamp(0.9rem, 1.6vw, 1.15rem);
+    line-height: 1.45;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    font-family: 'Lora', Georgia, serif;
+    padding: 2% 2% 1% 2%;
+    text-align: center;
+    background: none;
+    border: none;
+    overflow-y: auto;
+    margin-bottom: 1%;
+    min-height: 3em;
+    opacity: 0;
+    transition: opacity 0.5s ease-out, color 0.3s ease, background-color 0.2s ease, transform 0.3s ease;
+    cursor: default;
+}
 #fortune-display.oracle-screen.fortune-visible { opacity: 1; animation: fadeInSimple 0.8s ease-out forwards; }
-#fortune-display.oracle-screen.fortune-win { color: #ffd700; font-weight: bold; transform: scale(1.03); text-shadow: 1px 1px 3px #000, 0 0 6px rgba(255, 215, 0, 0.6); animation: fadeInWin 1.2s ease-out forwards; }
+#fortune-display.oracle-screen.fortune-win { color: #ffd700; font-weight: 600; transform: scale(1.03); text-shadow: 1px 1px 3px #000, 0 0 6px rgba(255, 215, 0, 0.6); animation: fadeInWin 1.2s ease-out forwards; }
 @keyframes fadeInSimple { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes fadeInWin { 0% { opacity: 0; transform: scale(0.9) translateY(10px); } 70% { opacity: 1; transform: scale(1.05) translateY(0); } 100% { opacity: 1; transform: scale(1.03) translateY(0); } }
-#fortune-display.oracle-screen::-webkit-scrollbar { width: 8px; } #fortune-display.oracle-screen::-webkit-scrollbar-track { background: rgba(10, 8, 4, 0.5); border-radius: 4px; } #fortune-display.oracle-screen::-webkit-scrollbar-thumb { background-color: #a07040; border-radius: 4px; border: 1px solid rgba(20, 15, 10, 0.8); } #fortune-display.oracle-screen::-webkit-scrollbar-thumb:hover { background-color: #b88a5a; } #fortune-display.oracle-screen { scrollbar-width: thin; scrollbar-color: #a07040 rgba(10, 8, 4, 0.5); }
+#fortune-display.oracle-screen::-webkit-scrollbar { width: 8px; }
+#fortune-display.oracle-screen::-webkit-scrollbar-track { background: rgba(10, 8, 4, 0.5); border-radius: 4px; }
+#fortune-display.oracle-screen::-webkit-scrollbar-thumb { background-color: #a07040; border-radius: 4px; border: 1px solid rgba(20, 15, 10, 0.8); }
+#fortune-display.oracle-screen::-webkit-scrollbar-thumb:hover { background-color: #b88a5a; }
+#fortune-display.oracle-screen { scrollbar-width: thin; scrollbar-color: #a07040 rgba(10, 8, 4, 0.5); }
 
-/* --- NEW: Key Wins Display --- */
+/* Key wins display area */
 #key-wins-display.key-wins {
     width: 95%;
     text-align: center;
-    font-size: clamp(0.7rem, 1.3vw, 0.8rem); /* Smaller font */
+    font-size: clamp(0.7rem, 1.3vw, 0.8rem);
     line-height: 1.3;
-    padding: 1% 0;
-    margin-bottom: 1%; /* Space before balance */
-    border-top: 1px solid rgba(180, 140, 80, 0.3); /* Separator line */
-    border-bottom: 1px solid rgba(180, 140, 80, 0.3); /* Separator line */
+    padding: 1.5% 0;
+    margin-bottom: 1.5%;
+    border-top: 1px solid rgba(180, 140, 80, 0.3);
+    border-bottom: 1px solid rgba(180, 140, 80, 0.3);
 }
-.key-wins .jackpot-line {
-    display: block; /* Each on its own line */
-    color: #ffd700; /* Gold for Jackpot */
-    font-weight: bold;
-}
-.key-wins .jackpot-line strong {
-    color: #ffebb0; /* Lighter gold for label */
-}
-.key-wins .other-wins-line {
-    display: block;
-    font-size: 0.9em; /* Even smaller */
-    color: #a09070; /* Muted color */
-}
+.key-wins .jackpot-line { display: block; color: #ffd700; font-family: 'Patua One', Georgia, serif; font-weight: normal; }
+.key-wins .jackpot-line strong { color: #ffebb0; }
+.key-wins .other-wins-line { display: block; font-size: 0.9em; color: #a09070; font-style: italic; }
 
-/* Balance & Jackpot Areas */
-#balance-info.balance-area { width: 100%; flex-shrink: 0; font-size: clamp(0.8rem, 1.4vw, 1.0rem); font-weight: 600; color: #c0b090; text-shadow: 1px 1px 2px #000; padding: 1% 1% 1% 1%; text-align: center; border-top: 1px dashed rgba(180, 140, 80, 0.3); margin-bottom: 1%; }
+/* Balance display area */
+#balance-info.balance-area {
+    width: 100%;
+    flex-shrink: 0;
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    font-weight: 600;
+    color: #c0b090;
+    text-shadow: 1px 1px 2px #000;
+    padding: 1% 1%;
+    text-align: center;
+    margin-bottom: 1%;
+}
 @keyframes flashSuccessAnim { 0%, 100% { background-color: transparent; transform: scale(1); } 50% { background-color: rgba(100, 220, 100, 0.4); transform: scale(1.05); } }
 .balance-area.flash-success { animation: flashSuccessAnim 0.7s ease-out; }
-#jackpot-info.jackpot-area { width: 100%; flex-shrink: 0; font-size: clamp(1.0rem, 1.8vw, 1.3rem); font-weight: 700; color: #fff5b0; text-shadow: 1px 1px 5px #000, 0 0 10px rgba(255, 220, 100, 0.8); padding: 1% 1% 1% 1%; text-align: center; border-top: 1px solid rgba(180, 140, 80, 0.5); transition: color 0.4s ease, text-shadow 0.4s ease; }
+@keyframes flashWarnAnim { 0%, 100% { background-color: transparent; transform: scale(1); } 50% { background-color: rgba(220, 100, 100, 0.4); transform: scale(1.05); } }
+.balance-area.flash-warn { animation: flashWarnAnim 0.7s ease-out; }
 
-/* Claim Button */
-#claim-button.withdraw-btn { position: absolute; z-index: 9; bottom: 0.5%; left: 35%; width: 30%; height: 3.5%; font-family: Georgia, 'Times New Roman', Times, serif; font-size: clamp(0.65rem, 1.3vw, 0.95rem); line-height: 1; font-weight: bold; color: #c0e0c0; background: linear-gradient(145deg, #406040, #204020); border: 2px solid #508050; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(180, 255, 180, 0.2); cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, opacity 0.3s ease; display: flex; justify-content: center; align-items: center; padding: 0 5px; opacity: 0.7; }
-#claim-button.withdraw-btn:hover:not(:disabled) { background: linear-gradient(145deg, #507050, #305030); box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 1px rgba(180, 255, 180, 0.3); opacity: 1; }
-#claim-button.withdraw-btn:active:not(:disabled) { transform: scale(0.97); box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2); }
-#claim-button.withdraw-btn:disabled { background: #555; color: #888; border-color: #666; cursor: not-allowed; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); transform: none; opacity: 0.5; }
+/* Jackpot display area */
+#jackpot-info.jackpot-area {
+    width: 100%;
+    flex-shrink: 0;
+    font-family: 'Patua One', Georgia, serif;
+    font-size: clamp(1.0rem, 1.8vw, 1.3rem);
+    font-weight: normal;
+    color: #fff5b0;
+    text-shadow: 1px 1px 5px #000, 0 0 10px rgba(255, 220, 100, 0.8);
+    padding: 1% 1%;
+    text-align: center;
+    border-top: 1px solid rgba(180, 140, 80, 0.5);
+    transition: color 0.4s ease, text-shadow 0.4s ease;
+}
+@keyframes jackpotFlashAnim { 0%, 100% { color: #fff5b0; text-shadow: 1px 1px 5px #000, 0 0 10px rgba(255, 220, 100, 0.8); } 50% { color: #ffffff; text-shadow: 1px 1px 3px #111, 0 0 15px rgba(255, 255, 200, 1); } }
+.jackpot-area.flash-update { animation: jackpotFlashAnim 0.8s ease-out; }
 
-/* Modal Styles (Unchanged) */
-.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(15, 10, 5, 0.85); backdrop-filter: blur(5px); z-index: 900; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; padding: 20px; }
+/* Deposit Button Styling */
+#deposit-button.deposit-btn {
+    z-index: 9;
+    width: 45%;
+    height: 100%;
+    font-family: 'Patua One', Georgia, serif;
+    font-size: clamp(0.65rem, 1.3vw, 0.95rem);
+    line-height: 1;
+    font-weight: normal;
+    color: #402810;
+    background: linear-gradient(145deg, #f8e0a0, #e8c070);
+    border: 2px solid #a07040;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255, 255, 200, 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+}
+#deposit-button.deposit-btn:hover { background: linear-gradient(145deg, #fce8b0, #f0c880); box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255, 255, 200, 0.3); }
+#deposit-button.deposit-btn:active { transform: scale(0.97); box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2); }
+
+/* Container using Flexbox */
+.bottom-buttons-container {
+    position: absolute;
+    bottom: 0%;
+    left: 10%;
+    width: 80%;
+    height: 4%;
+    z-index: 8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5%;
+}
+
+/* Withdraw button */
+#withdraw-button.withdraw-btn {
+    z-index: 9;
+    width: 45%;
+    height: 100%;
+    font-family: 'Patua One', Georgia, serif;
+    font-size: clamp(0.65rem, 1.3vw, 0.95rem);
+    line-height: 1;
+    font-weight: normal;
+    color: #c0e0c0;
+    background: linear-gradient(145deg, #406040, #204020);
+    border: 2px solid #508050;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(180, 255, 180, 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+    opacity: 0.7;
+}
+#withdraw-button.withdraw-btn:hover:not(:disabled) { background: linear-gradient(145deg, #507050, #305030); box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 1px rgba(180, 255, 180, 0.3); opacity: 1; }
+#withdraw-button.withdraw-btn:active:not(:disabled) { transform: scale(0.97); box-shadow: 0 1px 2px rgba(0,0,0,0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2); }
+#withdraw-button.withdraw-btn:disabled { background: #555; color: #888; border-color: #666; cursor: not-allowed; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); transform: none; opacity: 0.5; }
+
+/* Modal Styles */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(15, 10, 5, 0.85); backdrop-filter: blur(5px); z-index: 900; display: flex; justify-content: center; align-items: flex-start; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0s linear 0.4s; padding: 3vh 15px 20px 15px; overflow-y: auto; }
 .modal-overlay.is-visible { opacity: 1; visibility: visible; transition: opacity 0.4s ease; }
 .modal-content { background-color: rgba(30, 20, 10, 0.97); background-image: linear-gradient(rgba(40,30,20,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(40,30,20,0.5) 1px, transparent 1px); background-size: 15px 15px; color: #e0d6b8; padding: clamp(20px, 4vw, 40px); border: 1px solid #a07040; box-shadow: 0 5px 25px rgba(0,0,0,0.5); border-radius: 8px; max-width: 500px; width: 90%; position: relative; text-align: center; transform: scale(0.95); transition: transform 0.4s ease; max-height: 90vh; overflow-y: auto; }
 .modal-overlay.is-visible .modal-content { transform: scale(1); }
 .modal-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2.2rem; color: #a07040; cursor: pointer; line-height: 1; padding: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); z-index: 910; }
 .modal-close:hover { color: #e0d6b8; }
-.modal-content h2 { color: #e0b070; margin-bottom: 15px; font-size: clamp(1.2em, 3vw, 1.6em); text-shadow: 1px 1px 2px rgba(0,0,0,0.7); }
+.modal-content h2 { font-family: 'Patua One', Georgia, serif; color: #e0b070; margin-bottom: 15px; font-size: clamp(1.2em, 3vw, 1.6em); text-shadow: 1px 1px 2px rgba(0,0,0,0.7); font-weight: normal; }
 .modal-content p { margin-bottom: 15px; line-height: 1.4; font-size: clamp(0.9em, 2vw, 1.1em); }
 .modal-content p small { font-size: 0.8em; color: #a09070; }
-.modal-content p strong { color: #f0c080; font-weight: bold;}
-#qrcode-container { margin: 15px auto; background-color: white; padding: 10px; display: inline-block; border-radius: 4px; line-height: 0; max-width: 75%; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease; border: 2px solid transparent; position: relative; }
-#qrcode-container:hover { transform: scale(1.03); box-shadow: 0 0 15px rgba(255, 220, 150, 0.5); }
-#qrcode-container:active { transform: scale(0.98); }
-#qrcode-container.copy-success-qr { border-color: #77cc77; box-shadow: 0 0 15px rgba(100, 220, 100, 0.6); transform: scale(1.02); }
-#qrcode-canvas { display: block; width: 100% !important; max-width: 240px; height: auto !important; margin: 0 auto; }
-#payment-status { font-weight: bold; min-height: 1.2em; color: #ffcc66; font-size: clamp(0.9em, 2vw, 1.1em); }
-#payment-status.paid { color: #77cc77; } #payment-status.error { color: #ff6b6b; }
-.invoice-input { display: block; width: 95%; margin: 10px auto 15px auto; padding: 10px; font-family: 'Courier New', Courier, monospace; font-size: 0.85rem; line-height: 1.4; color: #e0d6b8; background-color: rgba(0,0,0,0.3); border: 1px solid #a07040; border-radius: 4px; resize: vertical; min-height: 60px; }
-.invoice-input:focus { outline: none; border-color: #e0b070; box-shadow: 0 0 5px rgba(224, 176, 112, 0.5); }
-.submit-claim-btn { font-family: Georgia, 'Times New Roman', Times, serif; font-size: clamp(0.9rem, 1.8vw, 1.1rem); padding: 8px 20px; color: #402810; background: linear-gradient(145deg, #f8e0a0, #e8c070); border: 2px solid #a07040; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2); cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease; margin-bottom: 15px; }
-.submit-claim-btn:hover:not(:disabled) { background: linear-gradient(145deg, #fce8b0, #f0c880); }
-.submit-claim-btn:active:not(:disabled) { transform: scale(0.98); }
-.submit-claim-btn:disabled { background: #888; color: #555; cursor: not-allowed; box-shadow: inset 0 1px 3px rgba(0,0,0,0.4); border-color: #666; }
-.claim-status-area { min-height: 1.5em; font-weight: bold; font-size: clamp(0.9em, 1.8vw, 1.0em); margin-top: 5px; padding: 5px; border-radius: 4px; }
-.claim-status-area.pending { color: #ffcc66; background-color: rgba(80, 60, 20, 0.3); }
-.claim-status-area.success { color: #77cc77; background-color: rgba(20, 60, 20, 0.3); }
-.claim-status-area.error { color: #ff6b6b; background-color: rgba(80, 20, 20, 0.3); }
-#fortune-display.oracle-screen.showing-invoice { font-family: 'Courier New', Courier, monospace; font-size: clamp(0.7rem, 1.2vw, 0.85rem); line-height: 1.35; color: #c0b090; text-align: left; word-break: break-all; white-space: normal; background-color: rgba(0,0,0,0.4); padding: 10px 12px; border-radius: 4px; border: 1px dashed rgba(180, 140, 80, 0.4); height: auto; min-height: 6em; flex-grow: 0; max-height: 10em; overflow-y: auto; opacity: 1 !important; animation: none !important; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; margin-bottom: 5%; cursor: default; }
-#fortune-display.oracle-screen.clickable-invoice { cursor: pointer; border-style: solid; border-color: rgba(224, 176, 112, 0.6); }
-#fortune-display.oracle-screen.clickable-invoice:hover { background-color: rgba(30, 25, 18, 0.6); color: #e0d6b8; border-color: rgba(240, 200, 100, 0.8); }
-#fortune-display.oracle-screen.copy-success { color: #77cc77 !important; background-color: rgba(20, 50, 20, 0.5) !important; text-align: center !important; font-weight: bold; font-family: Georgia, serif !important; font-size: 1.2em !important; border-color: #77cc77 !important; cursor: default !important; display: flex; align-items: center; justify-content: center; }
+.modal-content p strong { color: #f0c080; font-weight: 600; }
 
-/* Responsive Adjustments */
-@media (max-width: 1024px) { #card-display { left: 22%; width: 56%; } #draw-button.pay-button { left: 28%; width: 44%; } #info-trigger { left: 74%; width: 5%; } .output-area { left: 22%; width: 56%; } #instructions-area.instructions { left: 60%; } #claim-button.withdraw-btn { left: 33%; width: 34%; } /* Side panels removed */ }
-@media (max-width: 768px) { #draw-button.pay-button { bottom: 36%; left: 25%; width: 50%; } #info-trigger { bottom: 36%; left: 77%; width: 8%; } .output-area { left: 15%; width: 70%; } #instructions-area.instructions { left: initial; right: 5%; width: 200px; max-width: 50%; bottom: 44%;} #claim-button.withdraw-btn { left: 30%; width: 40%; bottom: 0; height: 4%; } .modal-content { padding: 20px; } #qrcode-container { max-width: 80%; } /* Side panels removed */ }
-@media (max-width: 480px) { body { padding: 5px; } .cabinet-frame { max-width: 100%; max-height: 95vh; } #draw-button.pay-button { bottom: 36%; left: 20%; width: 60%; } #info-trigger { bottom: 36%; left: 82%; width: 10%; } .output-area { bottom: 1%; left: 10%; width: 80%; height: 32%; padding-top: 2%; /* Adjust padding */ } #instructions-area.instructions { right: 2%; width: 160px; max-width: 60%; padding: 10px 15px; bottom: 45%;} #claim-button.withdraw-btn { left: 25%; width: 50%; bottom: -1%; height: 4.5%; font-size: 0.8rem;} .modal-content { padding: 15px; } .modal-content h2 { font-size: 1.1em; margin-bottom: 10px;} .modal-content p { font-size: 0.85em; margin-bottom: 10px;} #payment-status { font-size: 0.9em; } .modal-close { font-size: 1.8rem; top: 5px; right: 10px; } #qrcode-container { max-width: 85%; padding: 5px;} .invoice-input { font-size: 0.8rem; } .submit-claim-btn { font-size: 0.9rem; padding: 6px 15px;} .claim-status-area {font-size: 0.85em;} #key-wins-display.key-wins { font-size: 0.65rem; padding: 0.5% 0; } /* Adjust key wins font */ }
+/* QR Code container styling */
+#qrcode-container, #withdraw-qrcode-container, #deposit-qrcode-container { /* Applied to all QR containers */
+    margin: 15px auto; background-color: white; padding: 10px; display: inline-block; border-radius: 4px; line-height: 0; max-width: 75%; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease; border: 2px solid transparent; position: relative;
+}
+#qrcode-container:hover, #withdraw-qrcode-container:hover, #deposit-qrcode-container:hover { transform: scale(1.03); box-shadow: 0 0 15px rgba(255, 220, 150, 0.5); }
+#qrcode-container:active, #withdraw-qrcode-container:active, #deposit-qrcode-container:active { transform: scale(0.98); }
+#qrcode-container.copy-success-qr, #withdraw-qrcode-container.copy-success-qr, #deposit-qrcode-container.copy-success-qr { border-color: #77cc77; box-shadow: 0 0 15px rgba(100, 220, 100, 0.6); transform: scale(1.02); }
+
+/* QR Code canvas styling */
+#qrcode-canvas, #withdraw-qrcode-canvas, #deposit-qrcode-canvas { /* Applied to all canvases */
+    display: block; width: 100% !important; max-width: 240px; height: auto !important; margin: 0 auto;
+}
+
+/* Status message styling (Payment Modal) */
+#payment-status { font-weight: bold; min-height: 1.2em; color: #ffcc66; font-size: clamp(0.9em, 2vw, 1.1em); transition: color 0.3s ease; }
+#payment-status.paid { color: #77cc77; }
+#payment-status.error { color: #ff6b6b; }
+#payment-status.copy-feedback { color: #77cc77 !important; }
+
+/* Status message styling (Withdraw Modal) */
+#withdraw-status { font-weight: bold; min-height: 1.2em; color: #ffcc66; font-size: clamp(0.9em, 2vw, 1.1em); transition: color 0.3s ease; }
+#withdraw-status.paid { color: #77cc77; }
+#withdraw-status.error { color: #ff6b6b; }
+
+/* Status message styling (Deposit Modal) */
+#deposit-status { font-weight: bold; min-height: 1.2em; color: #ffcc66; font-size: clamp(0.9em, 2vw, 1.1em); transition: color 0.3s ease; }
+#deposit-status.paid { color: #77cc77; }
+#deposit-status.error { color: #ff6b6b; }
+
+/* Invoice/LNURL text display styling */
+.invoice-text, .lnurl-text {
+    display: block; font-family: 'Courier New', Courier, monospace; font-size: clamp(0.7rem, 1.2vw, 0.85rem); line-height: 1.35; color: #c0b090; word-break: break-all; white-space: normal; background-color: rgba(0,0,0,0.4); padding: 10px 12px; border-radius: 4px; border: 1px dashed rgba(180, 140, 80, 0.4); margin: 10px auto 15px auto; max-width: 95%; text-align: left; cursor: default; max-height: 8em; overflow-y: auto; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    overflow-wrap: break-word; /* Added for wrapping */
+}
+.invoice-text.clickable-invoice, .lnurl-text.clickable-lnurl { cursor: pointer; border-style: solid; border-color: rgba(224, 176, 112, 0.6); }
+.invoice-text.clickable-invoice:hover, .lnurl-text.clickable-lnurl:hover { background-color: rgba(30, 25, 18, 0.6); color: #e0d6b8; border-color: rgba(240, 200, 100, 0.8); }
+.invoice-text.copy-success, .lnurl-text.copy-success { color: #77cc77 !important; background-color: rgba(20, 50, 20, 0.5) !important; text-align: center !important; font-weight: 600 !important; font-family: 'Lora', Georgia, serif !important; font-size: 1.1em !important; border-color: #77cc77 !important; cursor: default !important; display: flex; align-items: center; justify-content: center; }
+
+/* --- Eye Glow Effect --- */
+.eye-glow { position: absolute; background-color: rgba(255, 220, 100, 0.5); border-radius: 50%; pointer-events: none; z-index: 2; box-shadow: 0 0 8px 3px rgba(255, 200, 50, 0.7); animation: pulse-eye-glow 3s infinite ease-in-out; transform: translate(-50%, -50%); }
+.eye-glow-left {
+    /* top: 29.49%; left: 47.44%; */ /* Old values */
+    top: 22.70%;    /* New Y for left eye */
+    left: 60.12%;   /* New X for left eye */
+    width: 3%;      /* You might need to adjust width/height based on new image scale */
+    height: 3%;     /* Adjust these visually */
+    animation-delay: 0.2s;
+}
+
+.eye-glow-right {
+    /* top: 29.49%; left: 51.73%; */ /* Old values */
+    top: 26.38%;   /* New Y for right eye */
+    left: 60.12%;  /* New X for right eye */
+    width: 3%;     /* Adjust these visually */
+    height: 3%;    /* Adjust these visually */
+}
+@keyframes pulse-eye-glow { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; box-shadow: 0 0 8px 3px rgba(255, 200, 50, 0.7); } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; box-shadow: 0 0 15px 6px rgba(255, 220, 100, 0.9); } }
+
+/* --- START: Styles for Amount Input Area (Applies to Withdraw & Deposit) --- */
+.amount-input-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 25px; padding: 10px 0; border-bottom: 1px solid rgba(180, 140, 80, 0.2); border-top: 1px solid rgba(180, 140, 80, 0.2); max-width: 90%; margin-left: auto; margin-right: auto; flex-wrap: wrap; }
+.amount-input-container label { margin-bottom: 0; flex-shrink: 0; color: #c0b090; font-size: 0.9em; margin-right: 5px; }
+.amount-input-container input { padding: 8px 10px; border-radius: 4px; border: 1px solid #a07040; background-color: rgba(0,0,0,0.3); color: #e0d6b8; width: 100px; text-align: right; font-size: 0.9em; vertical-align: middle; }
+.amount-input-container input:focus { outline: none; border-color: #f0c080; box-shadow: 0 0 5px rgba(240, 200, 100, 0.5); }
+.amount-input-container input::-webkit-outer-spin-button, .amount-input-container input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.amount-input-container input[type=number] { -moz-appearance: textfield; }
+
+/* Style for small buttons within modals (Update Link, Generate Invoice) */
+.small-button { padding: 6px 12px; font-family: 'Patua One', Georgia, serif; font-size: 0.85em; line-height: 1.4; color: #402810; background: linear-gradient(145deg, #d8c090, #b8a060); border: 1px solid #a07040; border-radius: 5px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease; flex-shrink: 0; vertical-align: middle; }
+.small-button:hover:not(:disabled) { background: linear-gradient(145deg, #e8d0a0, #c8b070); box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.small-button:active:not(:disabled) { transform: scale(0.96); box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); }
+.small-button:disabled { background: #777; color: #aaa; border-color: #888; cursor: not-allowed; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); transform: none; }
+/* --- END: Styles for Amount Input Area --- */
+
+/* --- START: Withdraw Modal UI Cleanup --- */
+#withdraw-amount-display { margin-bottom: 20px; font-size: 1.0em; color: #c0b090; }
+#withdraw-amount-display strong { color: #e0d6b8; font-weight: 600; }
+/* Target the <p> element immediately following the input container */
+.amount-input-container + p { margin-top: 25px !important; font-size: 0.9em; line-height: 1.5; color: #b0a080; }
+/* --- END: Withdraw Modal UI Cleanup --- */
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) { /* Smaller desktops / Large tablets */
+    #card-display { left: 22%; width: 56%; }
+    #draw-button.pay-button { left: 28%; width: 44%; }
+    #info-trigger { left: 74%; width: 5%; }
+    .output-area { left: 22%; width: 56%; }
+    #instructions-area.instructions { left: 60%; }
+}
+@media (max-width: 768px) { /* Tablets */
+    #draw-button.pay-button { bottom: 36%; left: 25%; width: 50%; }
+    #info-trigger { bottom: 36%; left: 77%; width: 8%; }
+    .output-area { left: 15%; width: 70%; }
+    #instructions-area.instructions { left: initial; right: 5%; width: 200px; max-width: 50%; bottom: 44%;}
+    .modal-content { padding: 20px; }
+    #qrcode-container, #withdraw-qrcode-container, #deposit-qrcode-container { max-width: 80%; } /* Added deposit */
+    .amount-input-container { justify-content: space-around; }
+}
+@media (max-width: 480px) { /* Mobile phones */
+    body { padding: 5px; }
+    .cabinet-frame { max-width: 100%; max-height: 95vh; }
+    #draw-button.pay-button { bottom: 36%; left: 20%; width: 60%; height: 4%; }
+    #info-trigger { bottom: 36%; left: 82%; width: 10%; height: 4%; }
+    .output-area { bottom: 5%; left: 10%; width: 80%; height: 28%; padding: 1.5% 2% 0.5% 2%; }
+    #fortune-display.oracle-screen { font-size: clamp(0.8rem, 2.8vw, 1.0rem); line-height: 1.4; }
+    #key-wins-display.key-wins { font-size: 0.6rem; padding: 0.5% 0; margin-bottom: 0.8%; }
+    #balance-info.balance-area { font-size: clamp(0.75rem, 2.5vw, 0.9rem); padding: 0.5% 1%; margin-bottom: 0.8%; }
+    #jackpot-info.jackpot-area { font-size: clamp(0.9rem, 3vw, 1.1rem); padding: 0.5% 1%; }
+    .bottom-buttons-container { bottom: 0.5%; left: 5%; width: 90%; height: 4.5%; gap: 3%; }
+    #deposit-button.deposit-btn, #withdraw-button.withdraw-btn { width: 48%; font-size: 0.75rem; }
+    .modal-content { padding: 15px; }
+    .modal-content h2 { font-size: 1.1em; margin-bottom: 10px;}
+    .modal-content p { font-size: 0.85em; margin-bottom: 10px;}
+    #payment-status, #withdraw-status, #deposit-status { font-size: 0.9em; } /* Added deposit */
+    .modal-close { font-size: 1.8rem; top: 5px; right: 10px; }
+    #qrcode-container, #withdraw-qrcode-container, #deposit-qrcode-container { max-width: 85%; padding: 5px; } /* Added deposit */
+    .invoice-text, .lnurl-text { font-size: 0.75rem; max-height: 6em; }
+    .amount-input-container { flex-direction: column; gap: 8px; align-items: stretch; padding: 10px 0; border-top: none; max-width: 100%; }
+    .amount-input-container input { width: 100%; text-align: center; }
+    .amount-input-container button { width: 100%; }
+    .amount-input-container label { text-align: center; margin-right: 0; }
+    .amount-input-container + p { margin-top: 15px !important; }
+    #withdraw-amount-display { margin-bottom: 15px; }
+}
+
 /* --- END OF FILE frontend/style.css --- */
